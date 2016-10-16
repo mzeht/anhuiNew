@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" default-autowire="byName"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+	<context:component-scan base-package="com.upg.zx"></context:component-scan>
+<!-- 
+	<bean id="spideOne" class="com.upg.zx.timer.SpideTimerOne" />
+	<bean id="scheduledSpideOne"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="spideOne" />
+		<property name="targetMethod" value="run" />
+	</bean>
+	<bean id="cronSpideSiteTriggerOne"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="scheduledSpideOne" />
+		<property name="cronExpression" value="0 0/2 * * * ?">
+		</property>
+	</bean>
+	
+	
+	<bean id="spideTwo" class="com.upg.zx.timer.SpideTimerTwo" />
+	<bean id="scheduledSpideTwo"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="spideTwo" />
+		<property name="targetMethod" value="run" />
+	</bean>
+	<bean id="cronSpideSiteTriggerTwo"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="scheduledSpideTwo" />
+		<property name="cronExpression" value="0 0/2 * * * ?" />
+	</bean>
+	
+
+
+
+	<bean id="spideThree" class="com.upg.zx.gd.timer.SpideTimerThree" />
+	<bean id="scheduledSpideThree"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="spideThree" />
+		<property name="targetMethod" value="run" />
+	</bean>
+	<bean id="cronSpideSiteTriggerThree"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="scheduledSpideThree" />
+		<property name="cronExpression" value="0 0 9,17 * * ?" />
+	</bean>
+
+	
+
+	<bean id="spideSiteTime"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		autowire="no">
+		<property name="triggers">
+			<list>
+				<ref bean="cronSpideSiteTriggerOne" />
+				<ref bean="cronSpideSiteTriggerTwo" /> 
+				<!-- <ref bean="cronSpideSiteTriggerThree" />
+			</list>
+		</property>
+	</bean>
+		 
+		 
+		  -->
+
+
+</beans>
+
+
+

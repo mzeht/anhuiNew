@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	<typeAlias alias="court" type="com.upg.zx.dto.Court" />
+	<typeAlias alias="siteObj" type="com.upg.zx.dto.CheckSite" />
+	<resultMap id="update-result" class="com.upg.zx.dto.CheckSite">
+		<result property="updateDate" column="updateDate" />
+		<result property="dataFrom" column="res_data" />
+		<result property="province" column="province" />
+	</resultMap>
+
+	<!-- 无案号SQL -->
+	<insert id="noCaseNo" parameterClass="court">
+	  <![CDATA[	
+		insert into
+		corp_court(t_date,res_data,justice,court,
+		start_date,case_no,case_res,plaintiff,
+		defandant,judge,person,province)
+		(select
+		now(),#dataFrom#,#justice#,#court#,
+		#startTime#,#case_no#,#case_res#,#plaintiff#,
+		#defandant#,#judge#,#person#,#province#
+		from dual where not exists
+		(select 1 from corp_court c where
+		c.res_data=#dataFrom# and c.start_date=#startTime# and c.province = #province#
+		and c.case_res=#case_res# and c.plaintiff=#plaintiff# 
+		and c.defandant=#defandant# and c.person=#person#
+		and c.court=#court# ))
+		]]>
+	</insert>
+
+	<!-- 有案号SQL -->
+	<insert id="hasCaseNo" parameterClass="court">
+		insert into
+		corp_court(t_date,res_data,justice,court,
+		start_date,case_no,case_res,plaintiff,
+		defandant,judge,person,province)
+		values(now(),#dataFrom#,#justice#,#court#,
+		#startTime#,#case_no#,#case_res#,#plaintiff#,
+		#defandant#,#judge#,#person#,#province#)
+		ON DUPLICATE KEY UPDATE court=
+		values(court),case_res=
+		values(case_res),plaintiff =
+		values(plaintiff),defandant =
+		values(defandant),judge =
+		values(judge),person = values(person)
+	</insert>
+
+	<parameterMap id="time" class="map">
+		<parameter property="realTime" jdbcType="varchar" javaType="java.lang.String"
+			mode="OUT" />
+		<parameter property="time" jdbcType="varchar" javaType="java.lang.String"
+			mode="IN" />
+	</parameterMap>
+	<procedure id="transformTime" parameterMap="time">
+		{ ? = call
+		fun_qx_date2(?)}
+	</procedure>
+
+	<insert id="insertSite" parameterClass="siteObj">
+    <![CDATA[	 	
+			insert into court_site(province,res_data,updateDate)
+			values(#province#,#dataFrom#,#updateDate#)
+			ON DUPLICATE KEY UPDATE province= values(province),res_data = values(res_data),updateDate = values(updateDate)
+		]]>
+	</insert>
+
+	<select id="queryUpdateSite" parameterClass="siteObj" resultMap="update-result">
+	<![CDATA[
+		select t.updateDate,t.res_data,t.province from court_site t 
+		where t.province =#province#
+		and t.res_data =#dataFrom#
+	]]>
+	</select>
+
+	<insert id="insertTime" parameterClass="siteObj">
+		insert into
+		court_site(res_data,province,startDate)
+		values(#dataFrom#,#province#,now())
+		ON DUPLICATE KEY UPDATE startDate = now()
+	</insert>
+
+<!-- 	<insert id="updateTime" parameterClass="siteObj">
+		update court_site set
+		startDate = now() where res_data =#dataFrom# and province =#province#
+	</insert> -->
+
+</sqlMap>
